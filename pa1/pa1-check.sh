@@ -18,7 +18,7 @@ for NUM in $(seq 1 $NUMTESTS); do
   curl $SRCDIR/model-outfile$NUM.txt > model-outfile$NUM.txt
 done
 
-curl $SRCDIR/ListTest.java > ModelListTest.java
+curl $SRCDIR/ModelListTest.java > ModelListTest.java
 
 make
 
