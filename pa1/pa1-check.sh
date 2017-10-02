@@ -3,7 +3,7 @@
 SRCDIR=https://raw.githubusercontent.com/legendddhgf/cmps101-pt.f17.grading/master/pa1
 NUMTESTS=3
 PNTSPERTEST=5
-MAXPTS=NUMTESTS*PNTSPERTEST
+let MAXPTS=$NUMTESTS*$PNTSPERTEST
 
 
 if [ ! -e backup ]; then
@@ -39,15 +39,18 @@ echo ""
 
 lextestspassed=$(expr 0)
 echo "Please be warned that the following tests discard all output to stdout/stderr"
-echo "Lex tests: If nothing between '=' signs, then test is passed: (press enter to continue)"
-read garbage
+echo "Lex tests: If nothing between '=' signs, then test is passed"
+echo "Press enter to continue (Type \"v + enter\" for more details)"
+read verbose
 for NUM in $(seq 1 $NUMTESTS); do
-  echo "Test $NUM:"
-  echo "=========="
   timeout 5 Lex infile$NUM.txt outfile$NUM.txt > garbage &>> garbage
   diff -bBwu outfile$NUM.txt model-outfile$NUM.txt > diff$NUM.txt
-  cat diff$NUM.txt
-  echo "=========="
+  if [ "$verbose" == "v" ]; then
+    echo "Test $NUM:"
+    echo "=========="
+    cat diff$NUM.txt
+    echo "=========="
+  fi
   if [ -e diff$NUM.txt ] && [[ ! -s diff$NUM.txt ]]; then
     let lextestspassed+=1
   fi
@@ -72,11 +75,16 @@ fi
 
 echo ""
 
-echo "Press Enter To Continue with ListTest Results"
-read garbage
+echo "Press Enter To Continue with ListTest Results (Type \"v + enter\" for more details)"
+read verbose
 
 javac ModelListTest.java List.java
-java ModelListTest > ListTest-out.txt &>> ListTest-out.txt
+if [ "$verbose" == "v" ]; then
+  java ModelListTest -v > ListTest-out.txt &>> ListTest-out.txt
+else
+  java ModelListTest > ListTest-out.txt &>> ListTest-out.txt
+fi
+
 cat ListTest-out.txt
 
 rm *.class ModelListTest.java
