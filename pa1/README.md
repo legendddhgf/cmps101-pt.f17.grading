@@ -1,4 +1,4 @@
-# cmps101-pt.u17/pa1
+# cmps101-pt.f17/pa1
 
 The following is a set of performance tests to run on your Lex program. It
 takes three example input files and compares your results to our correct model
@@ -11,7 +11,7 @@ Run the following in your working directory (the directory you wrote your code
 in) to get the test script and example input files:
 
 ```bash
-curl https://raw.githubusercontent.com/legendddhgf/cmps101-pt.u17.grading/master/pa1/pa1.sh > pa1.sh
+curl https://raw.githubusercontent.com/legendddhgf/cmps101-pt.f17.grading/master/pa1/pa1.sh > pa1.sh
 chmod +x pa1.sh
 ```
 
@@ -37,7 +37,8 @@ instructions at the prompt to run the script in verbose mode.
 
 The following command will remove all text files and shell scripts in your
 directory. Since you should not have any files that end in `.txt` or `.sh`
-anyway, this should serve to delete all the files we gave you.
+anyway, this should serve to delete all the files we gave you. Note that a
+backup folder is also create (called "Backup") and can be deleted if you choose.
 
 ```bash
 rm -f *.txt *.sh
