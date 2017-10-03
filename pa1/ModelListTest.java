@@ -578,23 +578,23 @@ class ModelListTest {
     NonEmpty_toString = test_count++;
 
     int tests_passed = 0;
-    if (verbose) {
+    if (verbose)
       System.out.println("\nList of tests passed/failed:\n");
-      for (int i = 0; i < test_count; i++) {
-        int test_status = runTest(i);
+    for (int i = 0; i < test_count; i++) {
+      int test_status = runTest(i);
+      if (verbose)
         System.out.printf("%s %s", testName(i),
             test_status == 0 ? "PASSED" : "FAILED");
-        if (test_status == 0) {
-          System.out.printf("\n");
-          tests_passed++;
-        } else if (test_status == 255) {
-          System.out.printf(": due to exception\n");
-        } else {
-          System.out.printf(": in test %d\n", test_status);
-        }
+      if (test_status == 0) {
+        if (verbose) System.out.printf("\n");
+        tests_passed++;
+      } else if (test_status == 255) {
+        if (verbose) System.out.printf(": due to exception\n");
+      } else {
+        if (verbose) System.out.printf(": in test %d\n", test_status);
       }
-      System.out.println();
     }
+    System.out.println();
 
     System.out.printf("\nPassed %d tests out of %d possible\n", tests_passed, test_count);
 
