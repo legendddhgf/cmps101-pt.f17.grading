@@ -43,8 +43,9 @@ echo "Lex tests: If nothing between '=' signs, then test is passed"
 echo "Press enter to continue (Type \"v + enter\" for more details)"
 read verbose
 for NUM in $(seq 1 $NUMTESTS); do
-  timeout 5 Lex infile$NUM.txt outfile$NUM.txt > garbage &>> garbage
-  diff -bBwu outfile$NUM.txt model-outfile$NUM.txt > diff$NUM.txt
+  rm -f outfile$NUM.txt
+  timeout 5 Lex infile$NUM.txt outfile$NUM.txt &> garbage >> garbage
+  diff -bBwu outfile$NUM.txt model-outfile$NUM.txt &> diff$NUM.txt >> diff$NUM.txt
   if [ "$verbose" == "v" ]; then
     echo "Test $NUM:"
     echo "=========="
@@ -80,9 +81,9 @@ read verbose
 
 javac ModelListTest.java List.java
 if [ "$verbose" == "v" ]; then
-  java ModelListTest -v > ListTest-out.txt &>> ListTest-out.txt
+  timeout 5 java ModelListTest -v > ListTest-out.txt &>> ListTest-out.txt
 else
-  java ModelListTest > ListTest-out.txt &>> ListTest-out.txt
+  timeout 5 java ModelListTest > ListTest-out.txt &>> ListTest-out.txt
 fi
 
 cat ListTest-out.txt
