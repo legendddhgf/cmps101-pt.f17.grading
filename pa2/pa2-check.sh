@@ -88,6 +88,10 @@ fi
 echo ""
 
 
+echo "LIST TEST IS NOT YET READY"
+exit
+
+
 echo "Press Enter To Continue with ListTest Results (type (\"v\" + enter) for more details)"
 read verbose
 
