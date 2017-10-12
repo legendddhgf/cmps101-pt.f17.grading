@@ -606,10 +606,10 @@ int main (int argc, char **argv) {
   disable_exit_handler = 0;
   atexit(exit_attempt_handler);
   signal(SIGSEGV, segfault_handler);
-  signal(SIGTERM, abrupt_termination_handler);
-  signal(SIGINT, abrupt_termination_handler);
+  //signal(SIGTERM, abrupt_termination_handler);
+  //signal(SIGINT, abrupt_termination_handler);
   signal(SIGFPE, abrupt_termination_handler);
-  signal(SIGABRT, abrupt_termination_handler);
+  //signal(SIGABRT, abrupt_termination_handler);
   for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
     List A = newList();
     List B = newList();
