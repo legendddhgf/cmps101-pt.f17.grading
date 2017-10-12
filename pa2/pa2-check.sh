@@ -95,7 +95,7 @@ echo ""
 echo ""
 
 gcc -c -std=c99 -Wall ModelListTest.c List.c
-gcc -o ListTest ModelListTest.o List.o
+gcc -o ModelListTest ModelListTest.o List.o
 
 if [ "$verbose" = "v" ]; then
    timeout 5 valgrind ./ModelListTest -v > ListTest-out.txt
