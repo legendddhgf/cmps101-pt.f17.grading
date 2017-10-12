@@ -606,9 +606,9 @@ int main (int argc, char **argv) {
   disable_exit_handler = 0;
   atexit(exit_attempt_handler);
   signal(SIGSEGV, segfault_handler);
-  //signal(SIGTERM, abrupt_termination_handler);
+  //signal(SIGTERM, abrupt_termination_handler); // dangerous
   //signal(SIGINT, abrupt_termination_handler);
-  signal(SIGFPE, abrupt_termination_handler);
+  //signal(SIGFPE, abrupt_termination_handler);
   //signal(SIGABRT, abrupt_termination_handler);
   for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
     List A = newList();
@@ -637,7 +637,7 @@ int main (int argc, char **argv) {
     freeList(&B);
   }
 
-  abnormal_exit:
+abnormal_exit:
   disable_exit_handler = 1;
 
   uint8_t totalScore = (MAXSCORE - NUM_TESTS) + testsPassed;
