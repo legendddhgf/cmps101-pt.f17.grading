@@ -105,5 +105,5 @@ fi
 
 cat ListTest-out.txt
 
-rm -f *.o ListTest Lex
+rm -f *.o ModelListTest* Lex
 

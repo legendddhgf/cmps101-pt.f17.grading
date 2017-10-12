@@ -109,6 +109,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
     case Empty_length:
       {
         if (length(A) != 0) return 1;
+        return 0;
       }
     case Append_length:
       {
@@ -117,6 +118,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         append(A, 3);
         append(A, 5);
         if (length(A) != 4) return 1;
+        return 0;
       }
     case Prepend_length:
       {
@@ -125,6 +127,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         prepend(A, 2);
         prepend(A, 1);
         if (length(A) != 4) return 1;
+        return 0;
       }
     case InsertAfter_length:
       {
@@ -135,6 +138,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         moveFront(A);
         insertAfter(A, 12);
         if (length(A) != 5) return 1;
+        return 0;
       }
     case InsertBefore_length:
       {
@@ -145,6 +149,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         moveFront(A);
         insertBefore(A, 115);
         if (length(A) != 5) return 1;
+        return 0;
       }
     case DeleteFront_length:
       {
@@ -157,6 +162,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         insertBefore(A, 115);
         deleteFront(A);
         if (length(A) != 3) return 1;
+        return 0;
       }
     case DeleteBack_length:
       {
@@ -169,6 +175,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         insertAfter(A, 12);
         deleteBack(A);
         if (length(A) != 3) return 1;
+        return 0;
       }
     case Delete_length:
       {
@@ -182,10 +189,12 @@ uint8_t runTest(List *pA, List *pB, int test) {
         insertAfter(A, 12);
         delete(A);
         if (length(A) != 3) return 1;
+        return 0;
       }
     case EmptyList_index:
       {
         if (index(A) != -1) return 1;
+        return 0;
       }
     case MoveFront_index:
       {
@@ -196,6 +205,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         append(A, 3214);
         moveFront(A);
         if (index(A) != 0) return 1;
+        return 0;
       }
     case MoveBack_index:
       {
@@ -206,6 +216,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         append(A, 3214);
         moveBack(A);
         if (index(A) != 4) return 1;
+        return 0;
       }
     case MoveNext_index:
       {
@@ -222,6 +233,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         moveNext(A);
         moveNext(A);
         if (index(A) != -1) return 2;
+        return 0;
       }
     case MovePrev_index:
       {
@@ -233,7 +245,8 @@ uint8_t runTest(List *pA, List *pB, int test) {
         if (index(A) != 1) return 1;
         movePrev(A);
         movePrev(A);
-        if (index(A) == -1) return 2;
+        if (index(A) != -1) return 2;
+        return 0;
       }
     case Append_index:
       {
@@ -251,7 +264,8 @@ uint8_t runTest(List *pA, List *pB, int test) {
         if (index(A) != 3) return 2;
         moveFront(A);
         movePrev(A);
-        if (index(A) == -1) return 3;
+        if (index(A) != -1) return 3;
+        return 0;
       }
     case Prepend_index:
       {
@@ -273,6 +287,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         moveFront(A);
         movePrev(A);
         if (index(A) != -1) return 3;
+        return 0;
       }
     case InsertAfter_index:
       {
@@ -289,6 +304,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         insertAfter(A, 345);
         moveBack(A);
         if (index(A) != 7) return 2;
+        return 0;
       }
     case InsertBefore_index:
       {
@@ -305,6 +321,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         moveFront(A);
         insertBefore(A, 67);
         if (index(A) != 1) return 2;
+        return 0;
       }
     case DeleteFront_index:
       {
@@ -320,6 +337,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         moveBack(A);
         deleteFront(A);
         if (index(A) != 3) return 2;
+        return 0;
       }
     case DeleteBack_index:
       {
@@ -336,6 +354,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         deleteBack(A);
         moveNext(A);
         if (index(A) != 1) return 2;
+        return 0;
       }
     case Delete_index:
       {
@@ -359,6 +378,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         if (index(A) != 0) return 4;
         delete(A);
         if (index(A) != -1) return 5;
+        return 0;
       }
     case Append_equals:
       {
@@ -368,6 +388,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         if (equals(A, B)) return 1;
         append(B, 2);
         if (!equals(A, B)) return 2;
+        return 0;
       }
     case Prepend_equals:
       {
@@ -377,6 +398,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         if (equals(A, B)) return 1;
         prepend(B, 2);
         if (!equals(A, B)) return 2;
+        return 0;
       }
     case InsertAfter_equals:
       {
@@ -390,6 +412,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         moveBack(A);
         insertAfter(A, 3);
         if (!equals(A, B)) return 2;
+        return 0;
       }
     case InsertBefore_equals:
       {
@@ -403,6 +426,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         moveFront(A);
         insertBefore(A, 3);
         if (!equals(A, B)) return 2;
+        return 0;
       }
     case DeleteFront_equals:
       {
@@ -419,6 +443,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         deleteFront(A);
         deleteFront(B);
         if (!equals(A, B)) return 3;
+        return 0;
       }
     case DeleteBack_equals:
       {
@@ -435,6 +460,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         deleteBack(A);
         deleteBack(B);
         if (!equals(A, B)) return 3;
+        return 0;
       }
     case Delete_equals:
       {
@@ -455,11 +481,13 @@ uint8_t runTest(List *pA, List *pB, int test) {
         moveBack(B);
         delete(B);
         if (!equals(A, B)) return 3;
+        return 0;
       }
     case Empty_clear:
       {
         clear(A);
         if (index(A) != -1 || length(A) != 0) return 1;
+        return 0;
       }
     case NonEmpty_clear:
       {
@@ -468,6 +496,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         moveFront(A);
         clear(A);
         if (index(A) != -1 || length(A) != 0) return 1;
+        return 0;
       }
     case Set_get:
       {
@@ -476,6 +505,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         deleteFront(A);
         moveBack(A);
         if (get(A) != 1) return 1;
+        return 0;
       }
     case Set_front:
       {
@@ -483,6 +513,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         prepend(A, 5);
         moveBack(A);
         if (front(A) != 5) return 1;
+        return 0;
       }
     case NonEmpty_front:
       {
@@ -494,6 +525,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         deleteFront(A);
         delete(A);
         if (front(A) != 5) return 1;
+        return 0;
       }
     case Set_back:
       {
@@ -501,6 +533,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         append(A, 5);
         moveFront(A);
         if (back(A) != 5) return 1;
+        return 0;
       }
     case NonEmpty_back:
       {
@@ -512,6 +545,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         deleteBack(A);
         delete(A);
         if (back(A) != 5) return 1;
+        return 0;
       }
     case Empty_copyList:
       {
@@ -519,6 +553,7 @@ uint8_t runTest(List *pA, List *pB, int test) {
         bool res = !equals(A, C);
         freeList(&C);
         if (res) return 1;
+        return 0;
       }
     case NonEmpty_copyList:
       {
@@ -529,10 +564,11 @@ uint8_t runTest(List *pA, List *pB, int test) {
         List C = copyList(A);
         bool res = (index(A) != 0 || !equals(A, C));
         freeList(&C);
-        if (res) return 1
+        if (res) return 1;
+        return 0;
       }
   }
-  return 0;
+  return 255;
 }
 
 int main (int argc, char **argv) {
