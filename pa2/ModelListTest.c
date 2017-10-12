@@ -3,11 +3,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <signal.h>
 
 #include "List.h"
 
 #define FIRST_TEST Empty_length
 #define MAXSCORE 55
+
+static uint8_t testsPassed;
+static volatile sig_atomic_t testStatus;
+static uint8_t disable_exit_handler;
 
 enum Test_e {
   Empty_length = 0,
@@ -54,7 +59,6 @@ enum Test_e {
 
   NUM_TESTS,
 };
-
 
 char *testName(int test) {
   if (test == Empty_length) return "Empty_length";
@@ -571,6 +575,28 @@ uint8_t runTest(List *pA, List *pB, int test) {
   return 255;
 }
 
+void segfault_handler(int signal) { // everyone knows what this is
+  testStatus = 255;
+  goto test_crash;
+}
+
+void exit_attempt_handler(void) { // only I decide when you are done
+  if (disable_exit_handler) return; // allow this to be disabled
+  testStatus = 255;
+  goto test_crash;
+}
+
+void abrupt_termination_handler(int signal) { // program killed externally
+  uint8_t totalScore = (MAXSCORE - NUM_TESTS) + testsPassed;
+
+  printf("\nYou passed %d out of %d tests\n", testsPassed,
+      NUM_TESTS);
+  printf("\nYou will receive %d out of %d possible points on the ListTests\n\n",
+      totalScore, MAXSCORE);
+  disable_exit_handler = 1;
+  exit(0);
+}
+
 int main (int argc, char **argv) {
   if (argc > 2 || (argc == 2 && strcmp(argv[1], "-v") != 0)) {
     printf("Usage: %s [-v]", (argc > 0 ? argv[0] : "./ListTest"));
@@ -580,17 +606,24 @@ int main (int argc, char **argv) {
   printf("\n"); // more spacing
   if (argc == 2) printf("\n"); // consistency in verbose mode
 
-  uint8_t testsPassed = 0;
-
+  testsPassed = 0;
+  disable_exit_handler = 0;
+  atexit(exit_attempt_handler);
+  signal(SIGSEGV, segfault_handler);
+  signal(SIGTERM, abrupt_termination_handler);
+  signal(SIGINT, abrupt_termination_handler);
+  signal(SIGFPE, abrupt_termination_handler);
+  signal(SIGABRT, abrupt_termination_handler);
   for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
     List A = newList();
     List B = newList();
-    uint8_t testStatus = runTest(&A, &B, i);
+    testStatus = runTest(&A, &B, i);
     if (argc == 2) { // it's verbose mode
       printf("Test %s: %s", testName(i), testStatus == 0 ? "PASSED" :
           "FAILED");
+test_crash:
       if (testStatus == 255) {
-        printf(": due to crashing\n");
+        printf(": due to a segfault or exit\n");
       } else if (testStatus != 0) {
         printf(": test %d\n", testStatus);
       } else {
