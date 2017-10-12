@@ -19,7 +19,7 @@ for NUM in $(seq 1 $NUMTESTS); do
    curl $SRCDIR/model-outfile$NUM.txt > model-outfile$NUM.txt
 done
 
-curl $SRCDIR/ListTest.c > ListTest.c
+curl $SRCDIR/ModelListTest.c > ModelListTest.c
 
 echo ""
 echo ""
@@ -94,13 +94,13 @@ read verbose
 echo ""
 echo ""
 
-gcc -c -std=c99 -Wall ListTest.c List.c
-gcc -o ListTest ListTest.o List.o
+gcc -c -std=c99 -Wall ModelListTest.c List.c
+gcc -o ListTest ModelListTest.o List.o
 
 if [ "$verbose" = "v" ]; then
-   timeout 5 valgrind ./ListTest -v > ListTest-out.txt
+   timeout 5 valgrind ./ModelListTest -v > ListTest-out.txt
 else
-   timeout 5 valgrind ./ListTest > ListTest-out.txt
+   timeout 5 valgrind ./ModelListTest > ListTest-out.txt
 fi
 
 cat ListTest-out.txt
