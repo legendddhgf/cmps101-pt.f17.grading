@@ -566,7 +566,6 @@ uint8_t runTest(List *pA, List *pB, int test) {
         append(A, 2);
         prepend(A, 1);
         moveFront(A);
-        moveBack(B);
         List C = copyList(A);
         bool res = (index(A) != 0 || !equals(A, C));
         freeList(&C);
