@@ -6,9 +6,8 @@ PNTSPERTEST=5
 let MAXPTS=$NUMTESTS*$PNTSPERTEST
 
 if [ ! -e backup ]; then
+   echo "WARNING: a backup has been created for you in the \"backup\" folder"
    mkdir backup
-  echo "WARNING: a backup has been created for you in the \"backup\" folder"
-  mkdir backup
 fi
 
 
