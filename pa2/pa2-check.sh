@@ -30,7 +30,7 @@ if [ ! -e Lex ] || [ ! -x Lex ]; then # exist and executable
    echo "Makefile doesn't correctly create Executable!!!"
    echo ""
    rm -f *.o Lex
-   gcc -c -std=c99 -Wall Lex.c List.c
+   gcc -c -std=c99 -Wall -g Lex.c List.c
    gcc -o Lex Lex.o List.o
 fi
 
@@ -92,7 +92,7 @@ read verbose
 echo ""
 echo ""
 
-gcc -c -std=c99 -Wall ModelListTest.c List.c
+gcc -c -std=c99 -Wall -g ModelListTest.c List.c
 gcc -o ModelListTest ModelListTest.o List.o
 
 if [ "$verbose" = "v" ]; then
