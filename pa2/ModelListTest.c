@@ -628,7 +628,7 @@ int main (int argc, char **argv) {
         printf("\n");
       }
     }
-    if (testStatus == 255) continue; // later there are problems if list corrupt
+    if (testStatus == 255) goto abnormal_exit; // later there are problems if list corrupt
     if (testStatus == 0) {
       testsPassed++;
     }
