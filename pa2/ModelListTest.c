@@ -614,6 +614,7 @@ int main (int argc, char **argv) {
     List B = newList();
     testStatus = runTest(&A, &B, i);
     uint8_t fail_type = setjmp(test_crash);
+    if (testStatus == 255) goto abnormal_exit; // later there are problems if list corrupt
     if (argc == 2) { // it's verbose mode
       printf("Test %s: %s", testName(i), testStatus == 0 ? "PASSED" :
           "FAILED");
@@ -628,7 +629,6 @@ int main (int argc, char **argv) {
         printf("\n");
       }
     }
-    if (testStatus == 255) goto abnormal_exit; // later there are problems if list corrupt
     if (testStatus == 0) {
       testsPassed++;
     }
