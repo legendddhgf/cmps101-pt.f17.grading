@@ -89,6 +89,3 @@ fi
 cat ListTest-out.txt
 
 rm *.class ModelListTest.java garbage
-
-cd ..
-

@@ -1,5 +1,3 @@
-import java.util.BitSet;
-
 class ObjectTestClass {
   int i;
   double d;
@@ -14,9 +12,19 @@ class ObjectTestClass {
   public String toString() {
     return i + "," + d + "," + str;
   }
+
+  public boolean equals(Object x) {
+    if (this.getClass() != x.getClass()) return false;
+    ObjectTestClass obj = (ObjectTestClass) x;
+    return (this.i == obj.i && this.d == obj.d && this.str.equals(obj.str));
+  }
 }
 
 class ModelListTest {
+
+  static int test_count;
+
+  static boolean verbose;
 
   static int Empty_length;
   static int Append_length;
@@ -107,502 +115,598 @@ class ModelListTest {
     return "";
   }
 
+  public static int runTest(int test) {
+
+    List A;
+    List B;
+
+    try {
+      if (test == Empty_length) {
+        A = new List();
+        if (A.length() != 0) return 1;
+      } else if (test == Append_length) {
+        A = new List();
+        A.append(1);
+        A.append(2);
+        A.append(3);
+        A.append(5);
+        if (A.length() != 4) return 1;
+      } else if (test == Prepend_length) {
+        A = new List();
+        A.prepend(6);
+        A.prepend(4);
+        A.prepend(2);
+        A.prepend(1);
+        if (A.length() != 4) return 1;
+      } else if (test == InsertAfter_length) {
+        A = new List();
+        A.append(1);
+        A.append(2);
+        A.append(3);
+        A.append(5);
+        A.moveFront();
+        A.insertAfter(12);
+        if (A.length() != 5) return 1;
+      } else if (test == InsertBefore_length) {
+        A = new List();
+        A.prepend(76);
+        A.prepend(4);
+        A.prepend(3);
+        A.prepend(1);
+        A.moveFront();
+        A.insertBefore(115);
+        if (A.length() != 5) return 1;
+      } else if (test == DeleteFront_length) {
+        A = new List();
+        A.prepend(76);
+        A.prepend(4);
+        A.deleteFront();
+        A.prepend(3);
+        A.prepend(1);
+        A.moveFront();
+        A.insertBefore(115);
+        A.deleteFront();
+        if (A.length() != 3) return 1;
+      } else if (test == DeleteBack_length) {
+        A = new List();
+        A.append(1);
+        A.deleteBack();
+        A.append(2);
+        A.append(3);
+        A.append(5);
+        A.moveFront();
+        A.insertAfter(12);
+        A.deleteBack();
+        if (A.length() != 3) return 1;
+      } else if (test == Delete_length) {
+        A = new List();
+        A.append(1);
+        A.append(2);
+        A.moveFront();
+        A.delete();
+        A.append(3);
+        A.append(5);
+        A.moveFront();
+        A.insertAfter(12);
+        A.delete();
+        if (A.length() != 3) return 1;
+      } else if (test == EmptyList_index) {
+        A = new List();
+        if (A.index() != -1) return 1;
+      } else if (test == MoveFront_index) {
+        A = new List();
+        A.append(1);
+        A.append(5);
+        A.append(16);
+        A.append(176);
+        A.append(3214);
+        A.moveFront();
+        if (A.index() != 0) return 1;
+      } else if (test == MoveBack_index) {
+        A = new List();
+        A.append(1);
+        A.append(5);
+        A.append(16);
+        A.append(176);
+        A.append(3214);
+        A.moveBack();
+        if (A.index() != 4) return 1;
+      } else if (test == MoveNext_index) {
+        A = new List();
+        A.append(1);
+        A.append(5);
+        A.append(16);
+        A.append(176);
+        A.append(3214);
+        A.moveFront();
+        A.moveNext();
+        A.moveNext();
+        if (A.index() != 2) return 1;
+        A.moveNext();
+        A.moveNext();
+        A.moveNext();
+        if (A.index() != -1) return 2;
+      } else if (test == MovePrev_index) {
+        A = new List();
+        A.append(1);
+        A.append(5);
+        A.append(3214);
+        A.moveBack();
+        A.movePrev();
+        if (A.index() != 1) return 1;
+        A.movePrev();
+        A.movePrev();
+        if (A.index() != -1) return 2;
+      } else if (test == Append_index) {
+        A = new List();
+        A.append(1);
+        A.append(5);
+        A.append(7);
+        A.moveBack();
+        A.append(45);
+        A.append(51);
+        A.append(3214);
+        if (A.index() != 2) return 1;
+        A.moveBack();
+        A.movePrev();
+        A.movePrev();
+        if (A.index() != 3) return 2;
+        A.moveFront();
+        A.movePrev();
+        if (A.index() != -1) return 3;
+      } else if (test == Prepend_index) {
+        A = new List();
+        A.prepend(1);
+        A.prepend(5);
+        A.prepend(7);
+        A.moveFront();
+        A.prepend(45);
+        A.prepend(51);
+        A.prepend(3214);
+        A.prepend(314);
+        A.prepend(324);
+        if (A.index() != 5) return 1;
+        A.moveBack();
+        A.movePrev();
+        A.prepend(234);
+        A.movePrev();
+        if (A.index() != 6) return 2;
+        A.moveFront();
+        A.movePrev();
+        if (A.index() != -1) return 3;
+      } else if (test == InsertAfter_index) {
+        A = new List();
+        A.append(5);
+        A.append(6);
+        A.append(4);
+        A.append(33);
+        A.append(2);
+        A.append(1);
+        A.moveBack();
+        A.insertAfter(75);
+        A.moveNext();
+        if (A.index() != 6) return 1;
+        A.insertAfter(345);
+        A.moveBack();
+        if (A.index() != 7) return 2;
+      } else if (test == InsertBefore_index) {
+        A = new List();
+        A.prepend(34);
+        A.prepend(4);
+        A.prepend(354);
+        A.prepend(3674);
+        A.moveBack();
+        A.insertBefore(435);
+        if (A.index() != 4) return 1;
+        A.prepend(324);
+        A.prepend(33464);
+        A.prepend(3498);
+        A.moveFront();
+        A.insertBefore(67);
+        if (A.index() != 1) return 2;
+      } else if (test == DeleteFront_index) {
+        A = new List();
+        A.prepend(5);
+        A.prepend(65);
+        A.prepend(43);
+        A.prepend(2);
+        A.prepend(8);
+        A.prepend(1);
+        A.moveFront();
+        A.deleteFront();
+        if (A.index() != -1) return 1;
+        A.moveBack();
+        A.deleteFront();
+        if (A.index() != 3) return 2;
+      } else if (test == DeleteBack_index) {
+        A = new List();
+        A.prepend(5);
+        A.prepend(65);
+        A.prepend(43);
+        A.prepend(2);
+        A.prepend(8);
+        A.prepend(1);
+        A.moveBack();
+        A.deleteBack();
+        if (A.index() != -1) return 1;
+        A.moveFront();
+        A.deleteBack();
+        A.moveNext();
+        if (A.index() != 1) return 2;
+      } else if (test == Delete_index) {
+        A = new List();
+        A.prepend(5);
+        A.prepend(65);
+        A.prepend(43);
+        A.moveBack();
+        A.delete();
+        if (A.index() != -1) return 1;
+        A.prepend(2);
+        A.prepend(8);
+        A.prepend(1);
+        A.moveBack();
+        if (A.index() != 4) return 2;
+        A.delete();
+        A.moveBack();
+        if (A.index() != 3) return 3;
+        A.moveFront();
+        A.delete();
+        A.moveFront();
+        if (A.index() != 0) return 4;
+        A.delete();
+        if (A.index() != -1) return 5;
+      } else if (test == Append_equals) {
+        A = new List();
+        B = new List();
+        A.append(1);
+        B.append(1);
+        A.append(2);
+        if (A.equals(B)) return 1;
+        B.append(2);
+        if (!A.equals(B)) return 2;
+        A = new List();
+        B = new List();
+        ObjectTestClass obj1 = new ObjectTestClass(1, 4.5, "hello");
+        A.append(obj1);
+        ObjectTestClass obj2 = new ObjectTestClass(5, 3.14, "how");
+        A.append(obj2);
+        B.append(obj1);
+        if (A.equals(B)) return 3;
+        B.append(obj2);
+        if (!A.equals(B)) return 4;
+      } else if (test == Prepend_equals) {
+        A = new List();
+        B = new List();
+        A.prepend(1);
+        B.prepend(1);
+        A.prepend(2);
+        if (A.equals(B)) return 1;
+        B.prepend(2);
+        if (!A.equals(B)) return 2;
+        A = new List();
+        B = new List();
+        ObjectTestClass obj1 = new ObjectTestClass(1, 4.5, "hello");
+        A.prepend(obj1);
+        ObjectTestClass obj2 = new ObjectTestClass(5, 3.14, "how");
+        A.prepend(obj2);
+        B.prepend(obj1);
+        if (A.equals(B)) return 3;
+        B.prepend(obj2);
+        if (!A.equals(B)) return 4;
+      } else if (test == InsertAfter_equals) {
+        A = new List();
+        B = new List();
+        A.append(1);
+        B.append(1);
+        A.append(2);
+        B.moveFront();
+        B.insertAfter(2);
+        if (!A.equals(B)) return 1;
+        B.append(3);
+        A.moveBack();
+        A.insertAfter(3);
+        if (!A.equals(B)) return 2;
+        A = new List();
+        B = new List();
+        ObjectTestClass obj1 = new ObjectTestClass(1, 4.5, "hello");
+        A.append(obj1);
+        ObjectTestClass obj2 = new ObjectTestClass(5, 3.14, "how");
+        A.moveFront();
+        A.insertAfter(obj2);
+        B.append(obj1);
+        if (A.equals(B)) return 3;
+        B.moveFront();
+        B.insertAfter(obj2);
+        if (!A.equals(B)) return 4;
+      } else if (test == InsertBefore_equals) {
+        A = new List();
+        B = new List();
+        A.prepend(1);
+        B.prepend(1);
+        A.prepend(2);
+        B.moveFront();
+        B.insertBefore(2);
+        if (!A.equals(B)) return 1;
+        B.prepend(3);
+        A.moveFront();
+        A.insertBefore(3);
+        if (!A.equals(B)) return 2;
+        A = new List();
+        B = new List();
+        ObjectTestClass obj1 = new ObjectTestClass(1, 4.5, "hello");
+        A.prepend(obj1);
+        ObjectTestClass obj2 = new ObjectTestClass(5, 3.14, "how");
+        A.moveBack();
+        A.insertBefore(obj2);
+        B.prepend(obj1);
+        if (A.equals(B)) return 3;
+        B.moveBack();
+        B.insertBefore(obj2);
+        if (!A.equals(B)) return 4;
+      } else if (test == DeleteFront_equals) {
+        A = new List();
+        B = new List();
+        A.append(1);
+        B.append(1);
+        A.append(2);
+        B.append(2);
+        A.deleteFront();
+        if (A.equals(B)) return 1;
+        B.deleteFront();
+        if (!A.equals(B)) return 2;
+        A.prepend(3);
+        B.prepend(3);
+        A.deleteFront();
+        B.deleteFront();
+        if (!A.equals(B)) return 3;
+        A = new List();
+        B = new List();
+        ObjectTestClass obj1 = new ObjectTestClass(1, 4.5, "hello");
+        A.append(obj1);
+        ObjectTestClass obj2 = new ObjectTestClass(5, 3.14, "how");
+        A.moveFront();
+        A.insertAfter(obj2);
+        A.deleteFront();
+        B.append(obj1);
+        if (A.equals(B)) return 4;
+        B.moveFront();
+        B.insertAfter(obj2);
+        B.deleteFront();
+        if (!A.equals(B)) return 5;
+      } else if (test == DeleteBack_equals) {
+        A = new List();
+        B = new List();
+        A.prepend(1);
+        B.prepend(1);
+        A.prepend(2);
+        B.prepend(2);
+        A.deleteBack();
+        if (A.equals(B)) return 1;
+        B.deleteBack();
+        if (!A.equals(B)) return 2;
+        A.append(3);
+        B.append(3);
+        A.deleteBack();
+        B.deleteBack();
+        if (!A.equals(B)) return 3;
+        A = new List();
+        B = new List();
+        ObjectTestClass obj1 = new ObjectTestClass(1, 4.5, "hello");
+        A.append(obj1);
+        ObjectTestClass obj2 = new ObjectTestClass(5, 3.14, "how");
+        A.moveFront();
+        A.insertBefore(obj2);
+        A.deleteBack();
+        B.append(obj1);
+        if (A.equals(B)) return 4;
+        B.moveFront();
+        B.insertBefore(obj2);
+        B.deleteBack();
+        if (!A.equals(B)) return 5;
+      } else if (test == Delete_equals) {
+        A = new List();
+        B = new List();
+        A.prepend(1);
+        B.prepend(1);
+        A.prepend(2);
+        B.prepend(2);
+        A.moveBack();
+        A.delete();
+        if (A.equals(B)) return 1;
+        B.moveBack();
+        B.delete();
+        if (!A.equals(B)) return 2;
+        A.append(3);
+        B.append(3);
+        A.moveBack();
+        A.delete();
+        B.moveBack();
+        B.delete();
+        if (!A.equals(B)) return 3;
+        A = new List();
+        B = new List();
+        ObjectTestClass obj1 = new ObjectTestClass(1, 4.5, "hello");
+        A.append(obj1);
+        ObjectTestClass obj2 = new ObjectTestClass(5, 3.14, "how");
+        A.moveFront();
+        A.insertAfter(obj2);
+        ObjectTestClass obj3 = new ObjectTestClass(7, 75.5, "are");
+        A.insertBefore(obj3);
+        A.moveFront();
+        A.moveNext();
+        A.delete();
+        B.append(obj1);
+        if (A.equals(B)) return 4;
+        B.moveFront();
+        B.insertAfter(obj2);
+        B.insertBefore(obj3);
+        B.moveFront();
+        B.moveNext();
+        B.delete();
+        if (!A.equals(B)) return 5;
+      } else if (test == Empty_clear) {
+        A = new List();
+        A.clear();
+        if (A.index() != -1 && A.length() != 0) return 1;
+      } else if (test == NonEmpty_clear) {
+        A = new List();
+        A.append(1);
+        A.prepend(2);
+        A.moveFront();
+        A.clear();
+        if (A.index() != -1 || A.length() != 0) return 1;
+      } else if (test == Set_get) {
+        A = new List();
+        A.append(1);
+        A.prepend(2);
+        A.deleteFront();
+        A.moveBack();
+        if (A.get() != 1) return 1;
+      } else if (test == Set_front) {
+        A = new List();
+        A.append(1);
+        A.prepend(5);
+        A.moveBack();
+        if (A.front() != 5) return 1;
+      } else if (test == NonEmpty_front) {
+        A = new List();
+        A.prepend(5);
+        A.append(7);
+        A.prepend(2);
+        A.moveFront();
+        A.insertBefore(43);
+        A.deleteFront();
+        A.delete();
+        if (A.front() != 5) return 1;
+      } else if (test == Set_back) {
+        A = new List();
+        A.prepend(1);
+        A.append(5);
+        A.moveFront();
+        if (A.back() != 5) return 1;
+      } else if (test == NonEmpty_back) {
+        A = new List();
+        A.append(5);
+        A.prepend(7);
+        A.append(2);
+        A.moveBack();
+        A.insertAfter(43);
+        A.deleteBack();
+        A.delete();
+        if (A.back() != 5) return 1;
+      } else if (test == Empty_toString) {
+        A = new List();
+        if (!A.toString().equals("")) return 1;
+      } else if (test == NonEmpty_toString) {
+        A = new List();
+        A.append(1);
+        A.prepend(5);
+        A.deleteBack();
+        A.append(7);
+        A.append(1);
+        if (!A.toString().equals("5 7 1")) return 1;
+        A = new List();
+        ObjectTestClass obj1 = new ObjectTestClass(1, 4.5, "hello");
+        A.append(obj1);
+        ObjectTestClass obj2 = new ObjectTestClass(5, 3.14, "how");
+        A.prepend(obj2);
+        A.deleteBack();
+        ObjectTestClass obj3 = new ObjectTestClass(7, 75.5, "are");
+        A.append(obj3);
+        ObjectTestClass obj4 = new ObjectTestClass(1, 1.43, "you");
+        A.append(obj4);
+        if (!A.toString().equals("5,3.14,how 7,75.5,are 1,1.43,you")) return 2;
+      }
+    } catch (Exception e) {
+      if (verbose) {
+        System.out.println("\nUnfortunately your program crashed on test " + testName(test) + " With an exception of:\n");
+        e.printStackTrace();
+        System.out.println();
+      }
+      return 255;
+    }
+    return 0;
+  }
+
   public static void main(String args[]) {
 
     if (args.length > 1 || (args.length == 1 && !args[0].equals("-v"))) {
       System.err.println("Usage: ./ListTest [-v]");
       System.exit(1);
     }
-    boolean verbose = false;
+    verbose = false;
     if (args.length == 1) verbose = true;
 
-    int testCount = 0;
+    test_count = 0;
     // form is TESTCASE_FUNCTION
-    Empty_length = testCount++;
-    Append_length = testCount++;
-    Prepend_length = testCount++;
-    InsertAfter_length = testCount++;
-    InsertBefore_length = testCount++;
-    DeleteFront_length = testCount++;
-    DeleteBack_length = testCount++;
-    Delete_length = testCount++;
+    Empty_length = test_count++;
+    Append_length = test_count++;
+    Prepend_length = test_count++;
+    InsertAfter_length = test_count++;
+    InsertBefore_length = test_count++;
+    DeleteFront_length = test_count++;
+    DeleteBack_length = test_count++;
+    Delete_length = test_count++;
 
-    EmptyList_index = testCount++;
-    MoveFront_index = testCount++;
-    MoveBack_index = testCount++;
-    MoveNext_index = testCount++;
-    MovePrev_index = testCount++;
-    Append_index = testCount++;
-    Prepend_index = testCount++;
-    InsertAfter_index = testCount++;
-    InsertBefore_index = testCount++;
-    DeleteFront_index = testCount++;
-    DeleteBack_index = testCount++;
-    Delete_index = testCount++;
+    EmptyList_index = test_count++;
+    MoveFront_index = test_count++;
+    MoveBack_index = test_count++;
+    MoveNext_index = test_count++;
+    MovePrev_index = test_count++;
+    Append_index = test_count++;
+    Prepend_index = test_count++;
+    InsertAfter_index = test_count++;
+    InsertBefore_index = test_count++;
+    DeleteFront_index = test_count++;
+    DeleteBack_index = test_count++;
+    Delete_index = test_count++;
 
-    Append_equals = testCount++;
-    Prepend_equals = testCount++;
-    InsertAfter_equals = testCount++;
-    InsertBefore_equals = testCount++;
-    DeleteFront_equals = testCount++;
-    DeleteBack_equals = testCount++;
-    Delete_equals = testCount++;
+    Append_equals = test_count++;
+    Prepend_equals = test_count++;
+    InsertAfter_equals = test_count++;
+    InsertBefore_equals = test_count++;
+    DeleteFront_equals = test_count++;
+    DeleteBack_equals = test_count++;
+    Delete_equals = test_count++;
 
-    Empty_clear = testCount++;
-    NonEmpty_clear = testCount++;
+    Empty_clear = test_count++;
+    NonEmpty_clear = test_count++;
 
-    Set_get = testCount++;
-    Set_front = testCount++;
-    NonEmpty_front = testCount++;
-    Set_back = testCount++;
-    NonEmpty_back = testCount++;
+    Set_get = test_count++;
+    Set_front = test_count++;
+    NonEmpty_front = test_count++;
+    Set_back = test_count++;
+    NonEmpty_back = test_count++;
 
-    Empty_toString = testCount++;
-    NonEmpty_toString = testCount++;
+    Empty_toString = test_count++;
+    NonEmpty_toString = test_count++;
 
-    // set for bits where tests are passed based off above bitmasks
-    BitSet testsPassed = new BitSet(testCount); // all tests are 0 (failed) by default
-
-    List A;
-    List B;
-
-    int i = 0;
-    for (i = 0; i < testCount; i++) {
-      try {
-        if (i == Empty_length) {
-          A = new List();
-          if (A.length() == 0) testsPassed.set(i);
-        } else if (i == Append_length) {
-          A = new List();
-          A.append(1);
-          A.append(2);
-          A.append(3);
-          A.append(5);
-          if (A.length() == 4) testsPassed.set(i);
-        } else if (i == Prepend_length) {
-          A = new List();
-          A.prepend(6);
-          A.prepend(4);
-          A.prepend(2);
-          A.prepend(1);
-          if (A.length() == 4) testsPassed.set(i);
-        } else if (i == InsertAfter_length) {
-          A = new List();
-          A.append(1);
-          A.append(2);
-          A.append(3);
-          A.append(5);
-          A.moveFront();
-          A.insertAfter(12);
-          if (A.length() == 5) testsPassed.set(i);
-        } else if (i == InsertBefore_length) {
-          A = new List();
-          A.prepend(76);
-          A.prepend(4);
-          A.prepend(3);
-          A.prepend(1);
-          A.moveFront();
-          A.insertBefore(115);
-          if (A.length() == 5) testsPassed.set(i);
-        } else if (i == DeleteFront_length) {
-          A = new List();
-          A.prepend(76);
-          A.prepend(4);
-          A.deleteFront();
-          A.prepend(3);
-          A.prepend(1);
-          A.moveFront();
-          A.insertBefore(115);
-          A.deleteFront();
-          if (A.length() == 3) testsPassed.set(i);
-        } else if (i == DeleteBack_length) {
-          A = new List();
-          A.append(1);
-          A.deleteBack();
-          A.append(2);
-          A.append(3);
-          A.append(5);
-          A.moveFront();
-          A.insertAfter(12);
-          A.deleteBack();
-          if (A.length() == 3) testsPassed.set(i);
-        } else if (i == Delete_length) {
-          A = new List();
-          A.append(1);
-          A.append(2);
-          A.moveFront();
-          A.delete();
-          A.append(3);
-          A.append(5);
-          A.moveFront();
-          A.insertAfter(12);
-          A.delete();
-          if (A.length() == 3) testsPassed.set(i);
-        } else if (i == EmptyList_index) {
-          A = new List();
-          if (A.index() == -1) testsPassed.set(i);
-        } else if (i == MoveFront_index) {
-          A = new List();
-          A.append(1);
-          A.append(5);
-          A.append(16);
-          A.append(176);
-          A.append(3214);
-          A.moveFront();
-          if (A.index() == 0) testsPassed.set(i);
-        } else if (i == MoveBack_index) {
-          A = new List();
-          A.append(1);
-          A.append(5);
-          A.append(16);
-          A.append(176);
-          A.append(3214);
-          A.moveBack();
-          if (A.index() == 4) testsPassed.set(i);
-        } else if (i == MoveNext_index) {
-          A = new List();
-          A.append(1);
-          A.append(5);
-          A.append(16);
-          A.append(176);
-          A.append(3214);
-          A.moveFront();
-          A.moveNext();
-          A.moveNext();
-          if (A.index() != 2) continue; // didn't pass part 1 of test
-          A.moveNext();
-          A.moveNext();
-          A.moveNext();
-          if (A.index() == -1) testsPassed.set(i);
-        } else if (i == MovePrev_index) {
-          A = new List();
-          A.append(1);
-          A.append(5);
-          A.append(3214);
-          A.moveBack();
-          A.movePrev();
-          if (A.index() != 1) continue; // didn't pass part 1 of test
-          A.movePrev();
-          A.movePrev();
-          if (A.index() == -1) testsPassed.set(i);
-        } else if (i == Append_index) {
-          A = new List();
-          A.append(1);
-          A.append(5);
-          A.append(7);
-          A.moveBack();
-          A.append(45);
-          A.append(51);
-          A.append(3214);
-          if (A.index() != 2) continue; // didn't pass part 1 of test
-          A.moveBack();
-          A.movePrev();
-          A.movePrev();
-          if (A.index() != 3) continue; // didn't pass part 2 of test
-          A.moveFront();
-          A.movePrev();
-          if (A.index() == -1) testsPassed.set(i);
-        } else if (i == Prepend_index) {
-          A = new List();
-          A.prepend(1);
-          A.prepend(5);
-          A.prepend(7);
-          A.moveFront();
-          A.prepend(45);
-          A.prepend(51);
-          A.prepend(3214);
-          A.prepend(314);
-          A.prepend(324);
-          if (A.index() != 5) continue; // didn't pass part 1 of test
-          A.moveBack();
-          A.movePrev();
-          A.prepend(234);
-          A.movePrev();
-          if (A.index() != 6) continue; // didn't pass part 2 of test
-          A.moveFront();
-          A.movePrev();
-          if (A.index() == -1) testsPassed.set(i);
-        } else if (i == InsertAfter_index) {
-          A = new List();
-          A.append(5);
-          A.append(6);
-          A.append(4);
-          A.append(33);
-          A.append(2);
-          A.append(1);
-          A.moveBack();
-          A.insertAfter(75);
-          A.moveNext();
-          if (A.index() != 6) continue; // didn't pass part 1 of test
-          A.insertAfter(345);
-          A.moveBack();
-          if (A.index() == 7) testsPassed.set(i);
-        } else if (i == InsertBefore_index) {
-          A = new List();
-          A.prepend(34);
-          A.prepend(4);
-          A.prepend(354);
-          A.prepend(3674);
-          A.moveBack();
-          A.insertBefore(435);
-          if (A.index() != 4) continue; // didn't pass part 1 of test
-          A.prepend(324);
-          A.prepend(33464);
-          A.prepend(3498);
-          A.moveFront();
-          A.insertBefore(67);
-          if (A.index() == 1) testsPassed.set(i);
-        } else if (i == DeleteFront_index) {
-          A = new List();
-          A.prepend(5);
-          A.prepend(65);
-          A.prepend(43);
-          A.prepend(2);
-          A.prepend(8);
-          A.prepend(1);
-          A.moveFront();
-          A.deleteFront();
-          if (A.index() != -1) continue; // didn't pass part 1 of test
-          A.moveBack();
-          A.deleteFront();
-          if (A.index() == 3) testsPassed.set(i);
-        } else if (i == DeleteBack_index) {
-          A = new List();
-          A.prepend(5);
-          A.prepend(65);
-          A.prepend(43);
-          A.prepend(2);
-          A.prepend(8);
-          A.prepend(1);
-          A.moveBack();
-          A.deleteBack();
-          if (A.index() != -1) continue; // didn't pass part 1 of test
-          A.moveFront();
-          A.deleteBack();
-          A.moveNext();
-          if (A.index() == 1) testsPassed.set(i);
-        } else if (i == Delete_index) {
-          A = new List();
-          A.prepend(5);
-          A.prepend(65);
-          A.prepend(43);
-          A.moveBack();
-          A.delete();
-          if (A.index() != -1) continue; // didn't pass part 1 of test
-          A.prepend(2);
-          A.prepend(8);
-          A.prepend(1);
-          A.moveBack();
-          if (A.index() != 4) continue; // didn't pass part 2 of test
-          A.delete();
-          A.moveBack();
-          if (A.index() != 3) continue; // didn't pass part 3 of test
-          A.moveFront();
-          A.delete();
-          A.moveFront();
-          if (A.index() != 0) continue; // didn't pass part 4 of test
-          A.delete();
-          if (A.index() == -1) testsPassed.set(i);
-        } else if (i == Append_equals) {
-          A = new List();
-          B = new List();
-          A.append(1);
-          B.append(1);
-          A.append(2);
-          if (A.equals(B)) continue; // didn't pass part 1 of test
-          B.append(2);
-          if (A.equals(B)) testsPassed.set(i);
-        } else if (i == Prepend_equals) {
-          A = new List();
-          B = new List();
-          A.prepend(1);
-          B.prepend(1);
-          A.prepend(2);
-          if (A.equals(B)) continue; // didn't pass part 1 of test
-          B.prepend(2);
-          if (A.equals(B)) testsPassed.set(i);
-        } else if (i == InsertAfter_equals) {
-          A = new List();
-          B = new List();
-          A.append(1);
-          B.append(1);
-          A.append(2);
-          B.moveFront();
-          B.insertAfter(2);
-          if (!A.equals(B)) continue; // didn't pass part 1 of test
-          B.append(3);
-          A.moveBack();
-          A.insertAfter(3);
-          if (A.equals(B)) testsPassed.set(i);
-        } else if (i == InsertBefore_equals) {
-          A = new List();
-          B = new List();
-          A.prepend(1);
-          B.prepend(1);
-          A.prepend(2);
-          B.moveFront();
-          B.insertBefore(2);
-          if (!A.equals(B)) continue; // didn't pass part 1 of test
-          B.prepend(3);
-          A.moveFront();
-          A.insertBefore(3);
-          if (A.equals(B)) testsPassed.set(i);
-        } else if (i == DeleteFront_equals) {
-          A = new List();
-          B = new List();
-          A.append(1);
-          B.append(1);
-          A.append(2);
-          B.append(2);
-          A.deleteFront();
-          if (A.equals(B)) continue; // didn't pass part 1 of test
-          B.deleteFront();
-          if (!A.equals(B)) continue; // didn't pass part 2 of test
-          A.prepend(3);
-          B.prepend(3);
-          A.deleteFront();
-          B.deleteFront();
-          if (A.equals(B)) testsPassed.set(i);
-        } else if (i == DeleteBack_equals) {
-          A = new List();
-          B = new List();
-          A.prepend(1);
-          B.prepend(1);
-          A.prepend(2);
-          B.prepend(2);
-          A.deleteBack();
-          if (A.equals(B)) continue; // didn't pass part 1 of test
-          B.deleteBack();
-          if (!A.equals(B)) continue; // didn't pass part 2 of test
-          A.append(3);
-          B.append(3);
-          A.deleteBack();
-          B.deleteBack();
-          if (A.equals(B)) testsPassed.set(i);
-        } else if (i == Delete_equals) {
-          A = new List();
-          B = new List();
-          A.prepend(1);
-          B.prepend(1);
-          A.prepend(2);
-          B.prepend(2);
-          A.moveBack();
-          A.delete();
-          if (A.equals(B)) continue; // didn't pass part 1 of test
-          B.moveBack();
-          B.delete();
-          if (!A.equals(B)) continue; // didn't pass part 2 of test
-          A.append(3);
-          B.append(3);
-          A.moveBack();
-          A.delete();
-          B.moveBack();
-          B.delete();
-          if (A.equals(B)) testsPassed.set(i);
-        } else if (i == Empty_clear) {
-          A = new List();
-          A.clear();
-          if (A.index() == -1 && A.length() == 0) testsPassed.set(i);
-        } else if (i == NonEmpty_clear) {
-          A = new List();
-          A.append(1);
-          A.prepend(2);
-          A.moveFront();
-          A.clear();
-          if (A.index() == -1 && A.length() == 0) testsPassed.set(i);
-        } else if (i == Set_get) {
-          A = new List();
-          A.append(1);
-          A.prepend(2);
-          A.deleteFront();
-          A.moveBack();
-          if ((int) A.get() == 1) testsPassed.set(i);
-        } else if (i == Set_front) {
-          A = new List();
-          A.append(1);
-          A.prepend(5);
-          A.moveBack();
-          if ((int) A.front() == 5) testsPassed.set(i);
-        } else if (i == NonEmpty_front) {
-          A = new List();
-          A.prepend(5);
-          A.append(7);
-          A.prepend(2);
-          A.moveFront();
-          A.insertBefore(43);
-          A.deleteFront();
-          A.delete();
-          if ((int) A.front() == 5) testsPassed.set(i);
-        } else if (i == Set_back) {
-          A = new List();
-          A.prepend(1);
-          A.append(5);
-          A.moveFront();
-          if ((int) A.back() == 5) testsPassed.set(i);
-        } else if (i == NonEmpty_back) {
-          A = new List();
-          A.append(5);
-          A.prepend(7);
-          A.append(2);
-          A.moveBack();
-          A.insertAfter(43);
-          A.deleteBack();
-          A.delete();
-          if ((int) A.back() == 5) testsPassed.set(i);
-        } else if (i == Empty_toString) {
-          A = new List();
-          if (A.toString().equals("")) testsPassed.set(i);
-        } else if (i == NonEmpty_toString) {
-          A = new List();
-          A.append(1);
-          A.prepend(5);
-          A.deleteBack();
-          A.append(7);
-          A.append(1);
-          if (!A.toString().equals("5 7 1")) continue;
-          A = new List();
-          A.append(1.0);
-          A.prepend(5.0);
-          A.deleteBack();
-          A.append(7.5);
-          A.append(1.43);
-          if (!A.toString().equals("5.0 7.5 1.43")) continue;
-          A = new List();
-          ObjectTestClass obj1 = new ObjectTestClass(1, 4.5, "hello");
-          A.append(obj1);
-          ObjectTestClass obj2 = new ObjectTestClass(5, 3.14, "how");
-          A.prepend(obj2);
-          A.deleteBack();
-          ObjectTestClass obj3 = new ObjectTestClass(7, 75.5, "are");
-          A.append(obj3);
-          ObjectTestClass obj4 = new ObjectTestClass(1, 1.43, "you");
-          A.append(obj4);
-          if (A.toString().equals("5,3.14,how 7,75.5,are 1,1.43,you")) testsPassed.set(i);
-        }
-      }catch (Exception e) {
-        if (verbose) {
-          System.out.println("\nUnfortunately your program crashed on test " + testName(i) + " With an exception of:\n");
-          e.printStackTrace();
-          System.out.println();
-        }
-      }
-    }
-
-    if (verbose) {
+    int tests_passed = 0;
+    if (verbose)
       System.out.println("\nList of tests passed/failed:\n");
-      for (i = 0; i < testCount; i++) {
-        System.out.printf("%s %s\n", testName(i), testsPassed.get(i) ? "PASSED" : "FAILED");
+    for (int i = 0; i < test_count; i++) {
+      int test_status = runTest(i);
+      if (verbose)
+        System.out.printf("%s %s", testName(i),
+            test_status == 0 ? "PASSED" : "FAILED");
+      if (test_status == 0) {
+        if (verbose) System.out.printf("\n");
+        tests_passed++;
+      } else if (test_status == 255) {
+        if (verbose) System.out.printf(": due to exception\n");
+      } else {
+        if (verbose) System.out.printf(": in test %d\n", test_status);
       }
-      System.out.println();
     }
+    System.out.println();
 
-    System.out.printf("\nPassed %d tests out of %d possible\n", testsPassed.cardinality(), testCount);
+    System.out.printf("\nPassed %d tests out of %d possible\n", tests_passed, test_count);
 
     final int maxScore = 10;
 
-    final int totalPoints = (maxScore - testCount / 4) + testsPassed.cardinality() / 4;
+    final int totalPoints = (maxScore - test_count / 4) + tests_passed / 4;
 
-    System.out.printf("\nThis gives you a score of %d out of %d for ListTest\n\n", totalPoints, maxScore);
+    System.out.printf("\nThis gives you a score of %d out of %d for this component of the assignment\n\n", totalPoints, maxScore);
   }
 }
 
