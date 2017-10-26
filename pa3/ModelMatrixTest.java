@@ -271,7 +271,7 @@ class ModelMatrixTest {
         e.printStackTrace();
         System.out.println();
       }
-      return 255
+      return 255;
     }
     return 0;
   }
