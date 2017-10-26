@@ -271,65 +271,66 @@ class ModelMatrixTest {
         e.printStackTrace();
         System.out.println();
       }
+      return 255
     }
+    return 0;
   }
-}
 
-public static void main(String args[]) {
+  public static void main(String args[]) {
 
-  if (args.length > 1 || (args.length == 1 && !args[0].equals("-v"))) {
-    System.err.println("Usage: ./MatrixTest [-v]");
-    System.exit(1);
-  }
-  verbose = false;
-  if (args.length == 1) verbose = true;
-
-  testCount = 0;
-  // form is TESTCASE_FUNCTION
-  Empty_getSize = testCount++;
-  NonEmpty_getSize = testCount++;
-
-  Empty_getNNZ = testCount++;
-  makeZero_getNNZ = testCount++;
-  changeEntry_getNNZ = testCount++;
-  copy_getNNZ = testCount++;
-  transpose_getNNZ = testCount++;
-  add_getNNZ = testCount++;
-  sub_getNNZ = testCount++;
-  scalarMult_getNNZ = testCount++;
-  mult_getNNZ = testCount++;
-
-  Empty_equals = testCount++;
-  NonEmpty_equals = testCount++;
-
-  Empty_toString = testCount++;
-  NonEmpty_toString = testCount++;
-
-  if (verbose) {
-    System.out.println("\nList of tests passed/failed:\n");
-  }
-  for (i = 0; i < testCount; i++) {
-    int test_status = runTest(i);
-    if (verbose)
-      System.out.printf("%s %s", testName(i),
-          test_status == 0 ? "PASSED" : "FAILED");
-    if (test_status == 0) {
-      if (verbose) System.out.printf("\n");
-      tests_passed++;
-    } else if (test_status == 255) {
-      if (verbose) System.out.printf(": due to exception\n");
-    } else {
-      if (verbose) System.out.printf(": in test %d\n", test_status);
+    if (args.length > 1 || (args.length == 1 && !args[0].equals("-v"))) {
+      System.err.println("Usage: ./MatrixTest [-v]");
+      System.exit(1);
     }
+    verbose = false;
+    if (args.length == 1) verbose = true;
+
+    testCount = 0;
+    // form is TESTCASE_FUNCTION
+    Empty_getSize = testCount++;
+    NonEmpty_getSize = testCount++;
+
+    Empty_getNNZ = testCount++;
+    makeZero_getNNZ = testCount++;
+    changeEntry_getNNZ = testCount++;
+    copy_getNNZ = testCount++;
+    transpose_getNNZ = testCount++;
+    add_getNNZ = testCount++;
+    sub_getNNZ = testCount++;
+    scalarMult_getNNZ = testCount++;
+    mult_getNNZ = testCount++;
+
+    Empty_equals = testCount++;
+    NonEmpty_equals = testCount++;
+
+    Empty_toString = testCount++;
+    NonEmpty_toString = testCount++;
+
+    if (verbose) {
+      System.out.println("\nList of tests passed/failed:\n");
+    }
+    for (i = 0; i < testCount; i++) {
+      int test_status = runTest(i);
+      if (verbose)
+        System.out.printf("%s %s", testName(i),
+            test_status == 0 ? "PASSED" : "FAILED");
+      if (test_status == 0) {
+        if (verbose) System.out.printf("\n");
+        tests_passed++;
+      } else if (test_status == 255) {
+        if (verbose) System.out.printf(": due to exception\n");
+      } else {
+        if (verbose) System.out.printf(": in test %d\n", test_status);
+      }
+    }
+
+    final int maxScore = 60;
+
+    final int totalPoints = (maxScore - testCount * 4) + testsPassed.cardinality() * 4; // four points per test
+
+    System.out.printf("\nPassed %d tests out of %d possible\n", testsPassed.cardinality(), testCount);
+
+    System.out.printf("\nThis gives you a score of %d out of %d for MatrixTest\n\n", totalPoints, maxScore);
   }
-
-  final int maxScore = 60;
-
-  final int totalPoints = (maxScore - testCount * 4) + testsPassed.cardinality() * 4; // four points per test
-
-  System.out.printf("\nPassed %d tests out of %d possible\n", testsPassed.cardinality(), testCount);
-
-  System.out.printf("\nThis gives you a score of %d out of %d for MatrixTest\n\n", totalPoints, maxScore);
-}
 }
 
