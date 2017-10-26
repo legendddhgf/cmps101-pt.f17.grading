@@ -440,7 +440,7 @@ class ModelListTest {
       } else if (test == Empty_clear) {
         A = new List();
         A.clear();
-        if (A.index() != -1 && A.length() != 0) return 1;
+        if (A.index() != -1 || A.length() != 0) return 1;
       } else if (test == NonEmpty_clear) {
         A = new List();
         A.append(1);
