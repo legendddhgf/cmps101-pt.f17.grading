@@ -311,7 +311,7 @@ class ModelMatrixTest {
     if (verbose) {
       System.out.println("\nList of tests passed/failed:\n");
     }
-    for (i = 0; i < testCount; i++) {
+    for (int i = 0; i < testCount; i++) {
       int test_status = runTest(i);
       if (verbose)
         System.out.printf("%s %s", testName(i),
