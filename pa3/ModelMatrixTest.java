@@ -254,7 +254,7 @@ class ModelMatrixTest {
         if (!A.toString().equals("")) return 1;
         A.changeEntry(4, 2, 42);
         A.makeZero();
-        if (A.toString().equals("")) return 2;
+        if (!A.toString().equals("")) return 2;
       } else if (test == NonEmpty_toString) {
         A = new Matrix(10);
         A.changeEntry(1, 1, 1);
@@ -328,7 +328,7 @@ class ModelMatrixTest {
 
     final int maxScore = 60;
 
-    final int totalPoints = (maxScore - testCount * 4) + tests_passed; // four points per test
+    final int totalPoints = (maxScore - testCount * 4) + tests_passed * 4; // four points per test
 
     if (verbose) {
       System.out.printf("\nPassed %d tests out of %d possible\n", tests_passed, testCount);
