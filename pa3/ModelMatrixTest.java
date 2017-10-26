@@ -2,6 +2,7 @@ class ModelMatrixTest {
 
   static boolean verbose;
   static int testCount;
+  static int tests_passed;
 
   static int Empty_getSize;
   static int NonEmpty_getSize;
@@ -56,7 +57,7 @@ class ModelMatrixTest {
     try {
       if (test == Empty_getSize) {
         A = new Matrix(3);
-        if (!A.getSize() == 3) return 1;
+        if (A.getSize() != 3) return 1;
       } else if (test == NonEmpty_getSize) {
         A = new Matrix(3);
         A.changeEntry(1, 1, 4);
@@ -66,7 +67,7 @@ class ModelMatrixTest {
         A.changeEntry(3, 1, 0);
         A.changeEntry(2, 2, 2);
         A.changeEntry(3, 3, 0);
-        if (!A.getSize() == 3) return 1;
+        if (A.getSize() != 3) return 1;
       } else if (test == Empty_getNNZ) {
         A = new Matrix(3);
         if (A.getNNZ() != 0) return 1;
@@ -286,6 +287,7 @@ class ModelMatrixTest {
     if (args.length == 1) verbose = true;
 
     testCount = 0;
+    tests_passed = 0;
     // form is TESTCASE_FUNCTION
     Empty_getSize = testCount++;
     NonEmpty_getSize = testCount++;
@@ -326,9 +328,11 @@ class ModelMatrixTest {
 
     final int maxScore = 60;
 
-    final int totalPoints = (maxScore - testCount * 4) + testsPassed.cardinality() * 4; // four points per test
+    final int totalPoints = (maxScore - testCount * 4) + tests_passed; // four points per test
 
-    System.out.printf("\nPassed %d tests out of %d possible\n", testsPassed.cardinality(), testCount);
+    if (verbose) {
+      System.out.printf("\nPassed %d tests out of %d possible\n", tests_passed, testCount);
+    }
 
     System.out.printf("\nThis gives you a score of %d out of %d for MatrixTest\n\n", totalPoints, maxScore);
   }
