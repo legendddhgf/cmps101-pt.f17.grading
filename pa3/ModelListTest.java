@@ -547,7 +547,7 @@ class ModelListTest {
       } else if (test == Empty_clear) {
         A = new List();
         A.clear();
-        if (A.index() != -1 && A.length() != 0) return 1;
+        if (A.index() != -1 || A.length() != 0) return 1;
       } else if (test == NonEmpty_clear) {
         A = new List();
         A.append(1);
@@ -561,13 +561,13 @@ class ModelListTest {
         A.prepend(2);
         A.deleteFront();
         A.moveBack();
-        if (A.get() != 1) return 1;
+        if (!A.get().equals(1)) return 1;
       } else if (test == Set_front) {
         A = new List();
         A.append(1);
         A.prepend(5);
         A.moveBack();
-        if (A.front() != 5) return 1;
+        if (!A.front().equals(5)) return 1;
       } else if (test == NonEmpty_front) {
         A = new List();
         A.prepend(5);
@@ -577,13 +577,13 @@ class ModelListTest {
         A.insertBefore(43);
         A.deleteFront();
         A.delete();
-        if (A.front() != 5) return 1;
+        if (!A.front().equals(5)) return 1;
       } else if (test == Set_back) {
         A = new List();
         A.prepend(1);
         A.append(5);
         A.moveFront();
-        if (A.back() != 5) return 1;
+        if (!A.back().equals(5)) return 1;
       } else if (test == NonEmpty_back) {
         A = new List();
         A.append(5);
@@ -593,7 +593,7 @@ class ModelListTest {
         A.insertAfter(43);
         A.deleteBack();
         A.delete();
-        if (A.back() != 5) return 1;
+        if (A.back().equals(5)) return 1;
       } else if (test == Empty_toString) {
         A = new List();
         if (!A.toString().equals("")) return 1;
