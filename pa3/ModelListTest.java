@@ -593,7 +593,7 @@ class ModelListTest {
         A.insertAfter(43);
         A.deleteBack();
         A.delete();
-        if (A.back().equals(5)) return 1;
+        if (!A.back().equals(5)) return 1;
       } else if (test == Empty_toString) {
         A = new List();
         if (!A.toString().equals("")) return 1;
