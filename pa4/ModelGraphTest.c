@@ -10,6 +10,11 @@
 #define FIRST_TEST DG_getSize
 #define MAXSCORE 40
 
+static uint8_t testsPassed;
+static volatile sig_atomic_t testStatus;
+static uint8_t disable_exit_handler;
+jmp_buf test_crash;
+
 enum Test_e {
   DG_getSize = 0, // directed graph tests
   DG_getSource,
@@ -230,7 +235,23 @@ uint8_t runTest(Graph *pA, List *pL, List *pC, int test) {
         return 0;
       }
   }
-  return 255;
+  return 254;
+}
+
+void segfault_handler(int signal) { // everyone knows what this is
+  testStatus = 255;
+  longjmp(test_crash, 1);
+}
+
+void exit_attempt_handler(void) { // only I decide when you are done
+  if (disable_exit_handler) return; // allow this to be disabled
+  testStatus = 255;
+  longjmp(test_crash, 2);
+}
+
+void abrupt_termination_handler(int signal) { // program killed externally
+  testStatus = 255;
+  longjmp(test_crash, 3);
 }
 
 int main (int argc, char **argv) {
@@ -242,26 +263,46 @@ int main (int argc, char **argv) {
   printf("\n"); // more spacing
   if (argc == 2) printf("\n"); // consistency in verbose mode
 
-  uint8_t testsPassed = 0;
+  testsPassed = 0;
+  disable_exit_handler = 0;
+  atexit(exit_attempt_handler);
+  signal(SIGSEGV, segfault_handler);
 
   for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
     Graph A = newGraph(100);
     List L = newList();
     List C = newList();
-    uint8_t passed = runTest(&A, &L, &C, i);
+    testStatus = runTest(&A, &L, &C, i);
+    freeGraph(&A);
+    freeList(&L);
+    freeList(&C);
+    uint8_t fail_type = setjmp(test_crash);
     if (argc == 2) { // it's verbose mode
       char teststr[5];
       sprintf(teststr, "%d", passed);
       printf("Test %s: %s%s\n", testName(i),
-          passed == 0 ? "PASSED" : "FAILED PART: ", passed == 0 ? "" : teststr);
+          passed == 0 ? "PASSED" : "FAILED");
+      if (testStatus == 255) {
+        printf(": due to a %s\n", fail_type == 1 ? "segfault" : fail_type == 2 ?
+            "program exit" : "program interruption");
+        printf("\nWARNING: Program will now stop running tests\n\n");
+        goto abnormal_exit;
+
+      } else if (testStatus == 254) {
+        printf(": undefined test\n");
+      } else if (testStatus != 0) {
+        printf(": test %d\n", testStatus);
+      } else {
+        printf("\n");
+      }
     }
-    if (passed == 0) {
+    if (testStatus == 0) {
       testsPassed++;
     }
-    freeGraph(&A);
-    freeList(&L);
-    freeList(&C);
   }
+
+abnormal_exit:
+  disable_exit_handler = 1;
 
   uint8_t totalScore = (MAXSCORE - NUM_TESTS * 4) + testsPassed * 4;
 

@@ -80,12 +80,11 @@ if [ -e FindPath ] || [ -e *.o ]; then
 fi
 
 echo ""
+echo ""
+echo ""
 
 echo "Press Enter To Continue with ListTest Results (type (\"v\" + enter) for more details)"
 read verbose
-
-echo ""
-echo ""
 
 gcc -c -std=c99 -Wall ModelListTest.c List.c
 gcc -o ModelListTest ModelListTest.o List.o
