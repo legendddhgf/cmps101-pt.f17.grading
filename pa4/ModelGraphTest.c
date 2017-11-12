@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <signal.h>
+#include <setjmp.h>
 
 #include "Graph.h"
 #include "List.h"
