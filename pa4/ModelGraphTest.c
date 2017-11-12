@@ -280,10 +280,8 @@ int main (int argc, char **argv) {
     freeList(&C);
     uint8_t fail_type = setjmp(test_crash);
     if (argc == 2) { // it's verbose mode
-      char teststr[5];
-      sprintf(teststr, "%d", passed);
-      printf("Test %s: %s%s\n", testName(i),
-          passed == 0 ? "PASSED" : "FAILED");
+      printf("Test %s %s", testName(i),
+          testStatus == 0 ? "PASSED" : "FAILED");
       if (testStatus == 255) {
         printf(": due to a %s\n", fail_type == 1 ? "segfault" : fail_type == 2 ?
             "program exit" : "program interruption");
