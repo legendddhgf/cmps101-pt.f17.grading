@@ -19,7 +19,7 @@ for NUM in $(seq 1 $NUMTESTS); do
 done
 
 curl $SRCDIR/ModelListTest.c > ModelListTest.c
-curl $SRCDIR/GraphTest.c > ModelGraphTest.c
+curl $SRCDIR/ModelGraphTest.c > ModelGraphTest.c
 
 echo ""
 echo ""
