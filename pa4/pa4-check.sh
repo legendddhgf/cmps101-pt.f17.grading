@@ -107,7 +107,7 @@ gcc -c -std=c99 -Wall ModelGraphTest.c Graph.c List.c
 gcc -o ModelGraphTest ModelGraphTest.o Graph.o List.o
 
 if [ "$verbose" = "v" ]; then
-  timeout 5 valgrind ./ModelGraphTest -v
+  timeout 5 valgrind --leak-check=full -v ./ModelGraphTest -v
 else
   timeout 5 valgrind ./ModelGraphTest
 fi
