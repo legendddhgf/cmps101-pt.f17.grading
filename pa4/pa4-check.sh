@@ -33,7 +33,7 @@ if [ ! -e FindPath ] || [ ! -x FindPath ]; then # exist and executable
   echo "Makefile doesn't correctly create Executable!!!"
   echo ""
   rm -f *.o FindPath
-  gcc -c -std=c99 -Wall FindPath.c Graph.c List.c
+  gcc -c -std=c99 -Wall -g FindPath.c Graph.c List.c
   gcc -o FindPath FindPath.o Graph.o List.o
 fi
 
@@ -85,7 +85,7 @@ echo ""
 echo "Press Enter To Continue with ListTest Results (type (\"v\" + enter) for more details)"
 read verbose
 
-gcc -c -std=c99 -Wall ModelListTest.c List.c
+gcc -c -std=c99 -Wall -g ModelListTest.c List.c
 gcc -o ModelListTest ModelListTest.o List.o
 
 if [ "$verbose" = "v" ]; then
@@ -103,7 +103,7 @@ read verbose
 echo ""
 echo ""
 
-gcc -c -std=c99 -Wall ModelGraphTest.c Graph.c List.c
+gcc -c -std=c99 -Wall -g ModelGraphTest.c Graph.c List.c
 gcc -o ModelGraphTest ModelGraphTest.o Graph.o List.o
 
 if [ "$verbose" = "v" ]; then
