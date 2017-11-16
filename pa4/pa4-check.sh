@@ -89,9 +89,9 @@ gcc -c -std=c99 -Wall -g ModelListTest.c List.c
 gcc -o ModelListTest ModelListTest.o List.o
 
 if [ "$verbose" = "v" ]; then
-  timeout 5 ./ModelListTest -v
+  timeout 5 valgrind ./ModelListTest -v
 else
-  timeout 5 ./ModelListTest
+  timeout 5 valgrind ./ModelListTest
 fi
 
 echo ""
