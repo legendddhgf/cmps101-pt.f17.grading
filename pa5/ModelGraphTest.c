@@ -305,8 +305,6 @@ int main (int argc, char **argv) {
     if (testStatus == 0) {
       testsPassed++;
     }
-    freeGraph(&A);
-    freeList(&L);
   }
 
   end_program(argc);
