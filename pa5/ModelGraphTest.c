@@ -251,7 +251,7 @@ void abrupt_termination_handler(int signal) { // program killed externally
 }
 
 //at least I got rid of the goto
-void end_program(void) {
+void end_program(uint8_t argc) {
   disable_exit_handler = 1;
 
   uint8_t totalScore = (MAXSCORE - NUM_TESTS * 5) + testsPassed * 5;
@@ -292,7 +292,7 @@ int main (int argc, char **argv) {
         printf(": due to a %s\n", fail_type == 1 ? "segfault" : fail_type == 2 ?
             "program exit" : "program interruption");
         printf("\nWARNING: Program will now stop running tests\n\n");
-        end_program();
+        end_program(argc);
 
       } else if (testStatus == 254) {
         printf(": undefined test\n");
@@ -309,7 +309,7 @@ int main (int argc, char **argv) {
     freeList(&L);
   }
 
-  end_program();
+  end_program(argc);
 
   return 0;
 }
