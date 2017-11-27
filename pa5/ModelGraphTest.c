@@ -279,12 +279,14 @@ int main (int argc, char **argv) {
   signal(SIGSEGV, segfault_handler);
 
   for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
+    uint8_t fail_type = setjmp(test_crash);
+    if (fail_type != 0) goto fail_jmp;
     Graph A = newGraph(100);
     List L = newList();
     testStatus = runTest(&A, &L, i);
     freeGraph(&A);
     freeList(&L);
-    uint8_t fail_type = setjmp(test_crash);
+fail_jmp:
     if (argc == 2) { // it's verbose mode
       printf("Test %s %s", testName(i),
           testStatus == 0 ? "PASSED" : "FAILED");
