@@ -83,7 +83,7 @@ echo ""
 echo "Press Enter To Continue with ListTest Results (type: \"v\" + enter, for more details"
 read verbose
 
-gcc -c -std=c99 -Wall ModelListTest.c List.c
+gcc -c -std=c99 -Wall -g ModelListTest.c List.c
 gcc -o ModelListTest ModelListTest.o List.o
 
 if [ "$verbose" = "v" ]; then
@@ -98,7 +98,7 @@ echo ""
 echo "Press Enter To Continue with GraphTest Results (type \"v\" + enter, for more details)"
 read verbose
 
-gcc -c -std=c99 -Wall ModelGraphTest.c Graph.c List.c
+gcc -c -std=c99 -Wall -g ModelGraphTest.c Graph.c List.c
 gcc -o ModelGraphTest ModelGraphTest.o Graph.o List.o
 
 if [ "$verbose" = "v" ]; then
